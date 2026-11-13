@@ -1,0 +1,107 @@
+<div class="container mb-4">
+    <h3>member Management</h3>
+
+    <div class="card p-3 mb-4">
+
+        <h5 class="mb-3">
+            {{ isEdit ? 'Edit Member' : 'Add Member' }}
+        </h5>
+
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label">Name</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Enter member name"
+                    [(ngModel)]="member.name">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input
+                    type="email"
+                    class="form-control form-control-sm"
+                    placeholder="Enter email address"
+                    [(ngModel)]="member.email">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Mobile Number</label>
+                <input
+                    type="tel"
+                    class="form-control form-control-sm"
+                    placeholder="Enter mobile number"
+                    [(ngModel)]="member.mobile">
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Address</label>
+                <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Enter address"
+                    [(ngModel)]="member.address">
+            </div>
+
+        </div>
+
+        <div class="d-flex gap-2 mt-3">
+
+            <button
+                class="btn btn-primary btn-sm px-4"
+                (click)="saveMembers()">
+
+                {{ isEdit ? 'Update Member' : 'Add Member' }}
+
+            </button>
+
+            <button
+                *ngIf="isEdit"
+                class="btn btn-outline-secondary btn-sm px-4"
+                (click)="resetForm()">
+
+                Cancel
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <h5>Member List</h5>
+
+    <table class="table table-bordered table-striped">
+
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let member of members">
+
+                <td>{{ member.name }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.mobile }}</td>
+                <td>{{ member.address }}</td>
+
+                <td>
+                    <button class="btn btn-warning btn-sm me-2" (click)="editMember(member)">
+                        Edit
+                    </button>
+
+                    <button class="btn btn-danger btn-sm" (click)="deleteMember(member.id)">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

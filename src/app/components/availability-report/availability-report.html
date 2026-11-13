@@ -1,0 +1,106 @@
+
+<div class="container mt-4">
+    <h3 class="mb-4">Book Availability Report</h3>
+    <div class="card p-4">
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Book Title</th>
+                        <th>Author</th>
+                        <th>Total Copies</th>
+                        <th>Assigned Copies</th>
+                        <th>Available Copies</th>
+                        <th>Status</th>
+                        <th>Assigned Members</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let book of books; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ book.title }}</td>
+                        <td>{{ book.author }}</td>
+                        <td>{{ book.totalCopies }}</td>
+                        <td>{{ getAssignedCopies(book.id) }}</td>
+                        <td>{{ getAvailableCopies(book.id) }}</td>
+                        <td>
+                            <span *ngIf="getAvailableCopies(book.id) > 0" class="badge bg-success"> Available</span>
+                            <span *ngIf="getAvailableCopies(book.id) === 0" class="badge bg-danger"> Out of Stock </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" (click)="viewMembers(book.id)"
+                                [disabled]="getAssignedCopies(book.id) === 0">
+                                View Members ({{ getAssignedCopies(book.id) }})</button>
+                    </td>
+                    </tr>
+                    <tr *ngIf="books.length === 0">
+                        <td colspan="8" class="text-center">
+                            No books available
+                        </td>
+                    </tr>
+                </tbody>
+        </table>
+        </div>
+    </div>
+    <div class="modal fade show d-block" tabindex="-1" *ngIf="showMembers"
+        style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title"> Assigned Members</h5>
+                        <small class="text-muted"> Book: {{ selectedBook?.title }}</small>
+                    </div>
+                    <button
+                        type="button"
+                        class="btn-close"
+                        (click)="closeMembers()">
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                       <span class="badge bg-primary">
+                            Total Members: {{ getAssignedCopies(selectedBookId) }}
+                        </span>
+                    </div>
+                    <input
+                        type="text"
+                        class="form-control mb-3"
+                        placeholder="Search by member name, email or mobile"
+                        [(ngModel)]="memberSearch">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Member Name</th>
+                                    <th>Email</th>
+                                    <th>Mobile</th>
+                                    <th>Assigned Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    *ngFor="let assignment of filteredAssignedMembers; let i = index">
+                                    <td>{{ i + 1 }}</td>
+                                    <td> {{ getMember(assignment.memberId)?.name || 'Member not found' }} </td>
+                                    <td> {{ getMember(assignment.memberId)?.email || '-' }}</td>
+                                    <td> {{ getMember(assignment.memberId)?.mobile || '-' }} </td>
+                                    <td>{{ assignment.assignmentDate | date:'dd-MM-yyyy' }}</td>
+                                </tr>
+                                <tr *ngIf="filteredAssignedMembers.length === 0">
+                                    <td colspan="5" class="text-center text-muted"> No matching members found.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" (click)="closeMembers()"> Close </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

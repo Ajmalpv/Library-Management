@@ -1,0 +1,88 @@
+
+<div class="container mt-4">
+    <h3>Book Assignment</h3>
+    <div class="card p-4 mb-4">
+        <h5 class="mb-3">Assign new books</h5>
+        <div class="mb-3 position-relative">
+            <label class="form-label">Search book</label>
+            <input type="text" class="form-control"placeholder="Search by book title or author"
+                [(ngModel)]="bookSearch"
+                (input)="onBookSearchChange()"
+                (focus)="showBookDropdown = true"/>
+            <div class="list-group position-absolute w-100 shadow" style="z-index: 1000;"
+                *ngIf="showBookDropdown && filteredBooks.length > 0">
+                <button type="button"  class="list-group-item list-group-item-action" *ngFor="let book of filteredBooks"
+                    (click)="selectBook(book)">
+                     <strong>{{ book.title }}</strong> <br>
+                    <small class="text-muted"> {{ book.author }} | Available: {{ getAvailableCopies(book.id) }}
+                    </small>
+                </button>
+            </div>
+            <small class="text-danger" *ngIf="showBookDropdown && bookSearch && filteredBooks.length === 0">
+                No available books found. </small>
+        </div>
+         <div class="mb-3 position-relative">
+            <label class="form-label">Search member</label>
+            <input  type="text"  class="form-control" placeholder="Search by name, email or mobile"
+                [(ngModel)]="memberSearch"
+                (input)="onMemberSearchChange()"
+                (focus)="showMemberDropdown = true" />
+            <div class="list-group position-absolute w-100 shadow" style="z-index: 999;"
+                *ngIf="showMemberDropdown && filteredMembers.length > 0">
+                <button type="button" class="list-group-item list-group-item-action"
+                    *ngFor="let member of filteredMembers"
+                    (click)="selectMember(member)">
+                    <strong>{{ member.name }}</strong><br>
+                    <small class="text-muted"> {{ member.email }} | {{ member.mobile }} </small>
+                </button>
+            </div>
+            <small class="text-danger" *ngIf="showMemberDropdown && memberSearch && filteredMembers.length === 0">
+                No members found.</small>
+        </div>
+        <div class="alert alert-info" *ngIf="bookId">Available copies:
+            <strong>{{ getAvailableCopies(bookId) }}</strong>
+        </div>
+        <button class="btn btn-primary" (click)="assignBooks()" [disabled]="!bookId || !memberId || getAvailableCopies(bookId) <= 0">
+             Assign Book </button>
+         </div>
+        <div class="card p-4">
+        <h5 class="mb-3">Assigned books</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Book Title</th>
+                        <th>Member Name</th>
+                        <th>Assigned Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let a of assignments; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ getBookTitle(a.bookId) }}</td>
+                        <td>{{ getMemberName(a.memberId) }}</td>
+                        <td>{{ a.assignmentDate | date:'dd-MM-yyyy' }}</td>
+                        <td>
+                            <span class="badge bg-success">Assigned</span>
+                        </td>
+                        <td>
+                            <button
+                                class="btn btn-danger btn-sm"
+                                (click)="returnBook(a.id)">
+                                Return
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="assignments.length === 0">
+                        <td colspan="6" class="text-center text-muted">
+                            No assignments found
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

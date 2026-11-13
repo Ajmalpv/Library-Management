@@ -1,0 +1,89 @@
+<div class="container mt-4">
+    <h3>Books Management</h3>
+<div class="card p-3 mb-4">
+    <h5 class="mb-3"> {{ isEdit ? 'Edit Book' : 'Add Book' }} </h5>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Book Title</label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Enter book title"
+                [(ngModel)]="book.title">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Author</label>
+            <input
+                type="text"
+                class="form-control form-control-sm"
+                placeholder="Enter author name"
+                [(ngModel)]="book.author">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Publication Year</label>
+            <input
+                type="number"
+                class="form-control form-control-sm"
+                placeholder="Publication year"
+                [(ngModel)]="book.publicationYear">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Total Copies</label>
+            <input
+                type="number"
+                class="form-control form-control-sm"
+                placeholder="Number of copies"
+                [(ngModel)]="book.totalCopies">
+        </div>
+        <div class="col-md-4">
+            <label class="form-label">Book Type</label>
+            <select
+                class="form-select form-select-sm"
+                [(ngModel)]="book.type">
+                <option value="">Select type</option>
+                <option value="fiction">Fiction</option>
+                <option value="poetry">Poetry</option>
+                <option value="history">History</option>
+                <option value="others">Others</option>
+            </select>
+        </div>
+    </div>
+    <div class="d-flex gap-2 mt-3">
+        <button class="btn btn-primary btn-sm px-4"(click)="saveBooks()">
+            {{ isEdit ? 'Update Book' : 'Add Book' }}
+        </button>
+
+        <button *ngIf="isEdit" class="btn btn-outline-secondary btn-sm px-4"
+            (click)="resetForm()"> Cancel </button>
+    </div>
+</div>
+
+    <h5>Boook list</h5>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>year</th>
+                <th>copies</th>
+                <th>type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let book of books">
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.publicationYear }}</td>
+                <td>{{ book.totalCopies }}</td>
+                <td>{{ book.type }}</td>
+        
+                <td>
+                    <button class="btn btn-warning btn-sm me-2" (click)="editBook(book)"> Edit </button>
+                    <button class="btn btn-danger btn-sm" (click)="deleteBook(book.id)"> Delete </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
